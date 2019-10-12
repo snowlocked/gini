@@ -14,10 +14,10 @@ export class Histogram {
     this.height = height || 600
 
     this.padding = Object.assign({}, padding, {
-      top: 16,
-      right: 16,
-      bottom: 16,
-      left: 16
+      top: 8,
+      right: 8,
+      bottom: 8,
+      left: 8
     })
     this.step = (this.width - this.padding.left - this.padding.right) / (data.length || 1)
     this.data = data || []

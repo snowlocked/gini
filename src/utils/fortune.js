@@ -1,6 +1,6 @@
 import {
   gini,
-  getRamdon,
+  getRandom,
   setColor
 } from './index.js'
 
@@ -62,14 +62,9 @@ class Fortune {
     const data = this.persons.map(person => person.fortune)
     return gini(data)
   }
-  minus (fortune = 1) {
-    this.persons.forEach(person => person.addFortune(-fortune))
-  }
-  add (fortune = 1, times = this.length) {
-    for (let i = 0; i < times; i++) {
-      const index = getRamdon(this.length)
-      this.persons[index].addFortune(fortune)
-    }
+  add (fortune = 1) {
+    const index = getRandom(this.length)
+    this.persons[index].addFortune(fortune)
   }
   record () {
     // console.log(this.sortData())
@@ -81,9 +76,18 @@ class Fortune {
         })
       })
   }
-  excute (data = {}) {
-    this.minus(data.minus || 1)
-    this.add(data.add || 1, data.times || this.length)
+  execute (data = {}) {
+    const times = (data.times || this.length) - this.length
+    for (let i = 0; i < this.length; i++) {
+      let fortune = this.persons[i].fortune
+      if (fortune > 0) {
+        this.persons[i].addFortune(-1)
+        this.add(1)
+      }
+    }
+    for (let i = 0; i < times; i++) {
+      this.add(1)
+    }
     this.record()
   }
   sortData () {

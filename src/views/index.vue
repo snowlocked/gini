@@ -9,7 +9,7 @@
         @start="start"
         @cancel="cancel"
       />
-      <div class="d3"></div>
+      <div class="d3-fortune"></div>
     </el-tab-pane>
     <el-tab-pane label="基尼系数走势图" name="gini">gini</el-tab-pane>
     <el-tab-pane label="特定成员财富走势图" name="member">member</el-tab-pane>
@@ -66,13 +66,13 @@ export default {
     },
     draw () {
       this.histogram = new Histogram({
-        width: document.body.clientWidth - 16 * 2,
+        width: document.body.clientWidth - 16 * 2 - 17,
         height:
           document.body.offsetHeight -
           this.$refs.histogramForm.$el.offsetHeight - 40 -
           16 * 2,
         data: this.fortune.persons,
-        selector: '.d3',
+        selector: '.d3-fortune',
         numberKey: 'fortune'
       })
     },
@@ -82,7 +82,7 @@ export default {
     run () {
       for (let i = 0; i < this.formData.oneFrameTimes; i++) {
         this.currentRound++
-        this.fortune.excute({
+        this.fortune.execute({
           times: this.formData.times
         })
       }
@@ -99,9 +99,12 @@ export default {
 <style lang="less">
 .home {
   padding: 16px;
-  .d3 {
+  .d3-fortune {
     position: relative;
     overflow: visible;
+  }
+  .el-form-item {
+    margin-bottom: 8px;
   }
 }
 </style>

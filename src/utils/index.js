@@ -12,7 +12,7 @@ export const gini = data => {
   return (avgArea - sumArea) / avgArea
 }
 
-export const getRamdon = (max = 100, min = 0) => Math.floor(Math.random() * (max - min) + min)
+export const getRandom = (max = 100, min = 0) => Math.floor(Math.random() * (max - min) + min)
 
 export const setColor = (index, total = 100) => {
   let p = (256 ** 3) * index / total
