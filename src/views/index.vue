@@ -11,8 +11,16 @@
       />
       <div class="d3-fortune"></div>
     </el-tab-pane>
-    <el-tab-pane label="基尼系数走势图" name="gini">gini</el-tab-pane>
-    <el-tab-pane label="特定成员财富走势图" name="member">member</el-tab-pane>
+    <el-tab-pane label="基尼系数走势图" name="gini">
+      <div class="d3-gini"></div>
+    </el-tab-pane>
+    <el-tab-pane label="特定成员财富走势图" name="member">
+      <el-form label-width="120px" label-position="left" inline>
+        <el-form-item label="id">
+          <el-input v-model="memberId"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -20,7 +28,7 @@
 import HistogramForm from '@/components/histogram'
 // @ is an alias to /src
 import Fortune from '@/utils/fortune'
-import { Histogram } from '@/utils/data'
+import { Histogram, LineChart } from '@/utils/data'
 
 export default {
   name: 'home',
@@ -39,8 +47,15 @@ export default {
         oneFrameTimes: 10
       },
       histogram: {},
+      giniLine: {},
       animation: null,
-      currentRound: 0
+      currentRound: 0,
+      memberId: ''
+    }
+  },
+  watch: {
+    currentTab (tab) {
+      this.changeTab(tab)
     }
   },
   mounted () {
@@ -48,10 +63,14 @@ export default {
       length: +this.formData.num,
       avg: +this.formData.initFortune
     })
-    this.draw()
-    // console.log(this.fortune)
+    this.drawFortune()
   },
   methods: {
+    changeTab (tab) {
+      if (tab === 'gini') {
+        this.drawGini()
+      }
+    },
     start () {
       this.fortune = new Fortune({
         length: +this.formData.num,
@@ -64,7 +83,7 @@ export default {
     cancel () {
       clearTimeout(this.animation)
     },
-    draw () {
+    drawFortune () {
       this.histogram = new Histogram({
         width: document.body.clientWidth - 16 * 2 - 17,
         height:
@@ -77,7 +96,7 @@ export default {
       })
     },
     update () {
-      this.histogram.update(this.fortune.sortData())
+      this.histogram.update(this.fortune.sort)
     },
     run () {
       for (let i = 0; i < this.formData.oneFrameTimes; i++) {
@@ -87,11 +106,22 @@ export default {
         })
       }
       this.update()
-      if (this.currentRound < this.formData.rounds) {
+      if (this.currentRound < this.formData.rounds - 1) {
         this.animation = setTimeout(this.run, 1e3 / 24)
       } else {
         this.currentRound = 0
       }
+    },
+    drawGini () {
+      if (this.giniLine.svg) {
+        this.giniLine.svg.remove()
+      }
+      this.giniLine = new LineChart({
+        width: document.body.clientWidth - 16 * 2 - 17,
+        height: document.body.offsetHeight - 40 - 32 * 2,
+        data: this.fortune.giniHistory,
+        selector: '.d3-gini'
+      })
     }
   }
 }

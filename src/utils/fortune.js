@@ -67,14 +67,13 @@ class Fortune {
     this.persons[index].addFortune(fortune)
   }
   record () {
-    // console.log(this.sortData())
     this.sortData()
-      .forEach((person, index) => {
-        person.recordHistory({
-          fortune: person.fortune,
-          round: this.length - index
-        })
+    this.sort.forEach((person, index) => {
+      person.recordHistory({
+        fortune: person.fortune,
+        round: this.length - index
       })
+    })
   }
   execute (data = {}) {
     const times = (data.times || this.length) - this.length
@@ -95,8 +94,9 @@ class Fortune {
       .sort((personA, personB) => personA.fortune - personB.fortune)
     this.getMiddle(sort)
     this.getGini(sort)
+    this.sort = sort
     // console.log(sort)
-    return sort
+    // return sort
   }
   getMiddle (data) {
     if (this.length % 2 === 0) {
