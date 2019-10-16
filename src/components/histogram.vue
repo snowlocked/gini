@@ -22,8 +22,8 @@
       <el-form-item label="基尼系数"><span>{{gini}}</span></el-form-item>
     </el-form>
     <div class="buttons">
-      <el-button type="primary" @click="start">start</el-button>
-      <el-button type="danger" @click="cancel">stop</el-button>
+      <el-button type="primary" size="mini" @click="start">start</el-button>
+      <el-button type="danger" size="mini" @click="cancel">stop</el-button>
     </div>
   </div>
 </template>

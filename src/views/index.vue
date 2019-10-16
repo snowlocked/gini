@@ -17,9 +17,15 @@
     <el-tab-pane label="特定成员财富走势图" name="member">
       <el-form label-width="120px" label-position="left" inline>
         <el-form-item label="id">
-          <el-input v-model="memberId"></el-input>
+          <el-input-number class="member-id" size="mini" v-model="memberId" :step="1" :min="1" :max="formData.num" />
+          <el-button type="success" size="mini" @click="drawMemberFortune">绘制</el-button>
+        </el-form-item>
+        <el-form-item v-if="memberId">
+          <span>最富裕时: {{fortune.persons[memberId-1].theRichest.fortune}}&nbsp;</span>
+          <span>最穷时: {{fortune.persons[memberId-1].thePoorest.fortune}}&nbsp;</span>
         </el-form-item>
       </el-form>
+      <div class="d3-member-fortune"></div>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -48,6 +54,7 @@ export default {
       },
       histogram: {},
       giniLine: {},
+      memberLine: {},
       animation: null,
       currentRound: 0,
       memberId: ''
@@ -114,13 +121,25 @@ export default {
     },
     drawGini () {
       if (this.giniLine.svg) {
-        this.giniLine.svg.remove()
+        this.giniLine.remove()
       }
       this.giniLine = new LineChart({
         width: document.body.clientWidth - 16 * 2 - 17,
         height: document.body.offsetHeight - 40 - 32 * 2,
         data: this.fortune.giniHistory,
         selector: '.d3-gini'
+      })
+    },
+    drawMemberFortune () {
+      if (this.memberLine.svg) {
+        this.memberLine.remove()
+      }
+      const data = this.fortune.persons[this.memberId - 1].history.map(data => data.fortune)
+      this.memberLine = new LineChart({
+        width: document.body.clientWidth - 16 * 2 - 17,
+        height: document.body.offsetHeight - 40 - 32 * 2,
+        data: data,
+        selector: '.d3-member-fortune'
       })
     }
   }
@@ -135,6 +154,9 @@ export default {
   }
   .el-form-item {
     margin-bottom: 8px;
+  }
+  .member-id{
+    margin-right:8px;
   }
 }
 </style>

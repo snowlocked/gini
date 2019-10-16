@@ -128,6 +128,10 @@ export class Histogram {
       .text(t => t)
     exitTooltip.remove()
   }
+  remove () {
+    this.tooltip.remove()
+    this.svg.remove()
+  }
 }
 
 export class LineChart {
@@ -241,19 +245,23 @@ export class LineChart {
         dataset.push([index, item])
       }
     })
-    this.point = this.svg.append('g')
+    this.point = this.setPoints(dataset, { r: 5, color: 'transparent', xScale, yScale })
+    this.addToolTipEvent(this.point, { xScale, yScale })
+    this.setPoints(dataset, { r: 2, color: '#67C23A', xScale, yScale })
+  }
+  setPoints (data, { r, color, xScale, yScale }) {
+    return this.svg.append('g')
       .selectAll('circle')
-      .data(dataset)
+      .data(data)
       .enter()
       .append('circle')
-      .attr('r', 2)
+      .attr('r', r)
       .property('data', d => d)
       .attr(
         'transform',
         (d, index) => 'translate(' + (xScale(d[0]) + this.padding.left) + ',' + (yScale(d[1]) + this.padding.top) + ')'
       )
-      .attr('fill', '#67C23A')
-    this.addToolTipEvent(this.point, { xScale, yScale })
+      .attr('fill', color)
   }
   addToolTipEvent (point, scale) {
     const self = this
@@ -276,7 +284,7 @@ export class LineChart {
       )
       .style(
         'top',
-        (yScale(y) + this.padding.top - 37) + 'px'
+        (yScale(y) + this.padding.top - 27) + 'px'
       )
       .style('visibility', 'visible')
       .selectAll('tspan')
@@ -291,5 +299,9 @@ export class LineChart {
       .style('display', 'block')
       .text(t => t)
     exitTooltip.remove()
+  }
+  remove () {
+    this.tooltip.remove()
+    this.svg.remove()
   }
 }
