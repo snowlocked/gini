@@ -7,14 +7,13 @@
       <el-form-item prop="initFortune" label="每人初始财富">
         <el-input-number size="mini" placeholder="初始财富" v-model="model.initFortune"></el-input-number>
       </el-form-item>
-      <el-form-item prop="times" label="每回合增加次数">
-        <el-input-number size="mini" placeholder="每回合增加次数" v-model="model.times" :min="model.num"></el-input-number>
+      <el-form-item prop="times" label="增长率">
+        <el-input size="mini" placeholder="增长率" v-model="model.ratio" :min="0">
+          <template slot="append">%</template>
+        </el-input>
       </el-form-item>
-      <el-form-item prop="rounds" label="执行回合数">
-        <el-input-number size="mini" placeholder="执行回合数" v-model="model.rounds"></el-input-number>
-      </el-form-item>
-      <el-form-item prop="oneFrameTimes" label="每帧回合数">
-        <el-input-number size="mini" placeholder="每帧回合数" v-model="model.oneFrameTimes"></el-input-number>
+      <el-form-item prop="rounds" label="执行年数">
+        <el-input-number size="mini" placeholder="执行年数" v-model="model.years"></el-input-number>
       </el-form-item>
     </el-form>
     <el-form  label-width="120px" label-position="left" inline>

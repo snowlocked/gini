@@ -1,5 +1,7 @@
 import * as d3 from 'd3'
-
+import {
+  YEAR_TO_DAYS
+} from './define'
 function getScaleY (data) {
   const max = d3.max(data, d => d[this.numberKey])
   const scaleY = (this.height - this.padding.bottom) * 0.9 / max
@@ -190,18 +192,22 @@ export class LineChart {
     const xScale = d3.scaleLinear()
       .domain([0, this.data.length])
       .range([0, this.width - this.padding.left - this.padding.right])
+    const xScaleYear = d3.scaleLinear()
+      .domain([0, Math.floor(this.data.length/YEAR_TO_DAYS)])
+      .range([0, this.width - this.padding.left - this.padding.right])
     // y轴比例
     const yScale = d3.scaleLinear()
       .domain([0, max])
       .range([this.height - this.padding.top - this.padding.bottom, 0])
     return {
       xScale,
-      yScale
+      yScale,
+      xScaleYear
     }
   }
-  setAxis ({ xScale, yScale }) {
+  setAxis ({ xScaleYear, yScale }) {
     const xAxis = d3.axisBottom()
-      .scale(xScale)
+      .scale(xScaleYear)
     const yAxis = d3.axisLeft()
       .scale(yScale)
     return {
@@ -235,10 +241,7 @@ export class LineChart {
       .attr('stroke', '#67C23A')
   }
   drawPoint ({ xScale, yScale }) {
-    let step = Math.floor(this.data.length / 100)
-    if (step < 1) {
-      step = 1
-    }
+    const step = YEAR_TO_DAYS
     const dataset = []
     this.data.forEach((item, index) => {
       if (index % step === 0 || index + 1 === this.data.length) {

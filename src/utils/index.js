@@ -9,7 +9,10 @@ export const gini = data => {
   const avgArea = sumData[len - 1] * (len + 1) / 2
 
   const sumArea = sumData.reduce((sum, value) => sum + value, 0)
-  return (avgArea - sumArea) / avgArea
+  return {
+    total: sumData[len - 1],
+    gini: (avgArea - sumArea) / avgArea
+  }
 }
 
 export const getRandom = (max = 100, min = 0) => Math.floor(Math.random() * (max - min) + min)
@@ -25,3 +28,5 @@ export const setColor = (index, total = 100) => {
   const blue = Math.floor(p % 256)
   return `rgba(${red},${green},${blue}, 1)`
 }
+
+

@@ -58,10 +58,6 @@ class Fortune {
     this.getMiddle(this.persons)
     this.getGini(this.persons)
   }
-  calcGini () {
-    const data = this.persons.map(person => person.fortune)
-    return gini(data)
-  }
   add (fortune = 1) {
     const index = getRandom(this.length)
     this.persons[index].addFortune(fortune)
@@ -76,7 +72,7 @@ class Fortune {
     })
   }
   execute (data = {}) {
-    const times = (data.times || this.length) - this.length
+    const times = data.times || 0
     for (let i = 0; i < this.length; i++) {
       let fortune = this.persons[i].fortune
       if (fortune > 0) {
@@ -84,9 +80,13 @@ class Fortune {
         this.add(1)
       }
     }
-    for (let i = 0; i < times; i++) {
+    // console.log(times)
+    for (let i = 1; i < times; i++) {
+      
       this.add(1)
     }
+    const rest = times-Math.floor(times)
+    rest > 0 && this.add(rest)
     this.record()
   }
   sortData () {
@@ -106,7 +106,9 @@ class Fortune {
     }
   }
   getGini (data) {
-    this.gini = gini(data.map(val => val.fortune))
+    const giniData = gini(data.map(val => val.fortune))
+    this.gini = giniData.gini
+    this.total = giniData.total
     this.giniHistory.push(this.gini)
   }
 }

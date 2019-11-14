@@ -17,7 +17,14 @@
     <el-tab-pane label="特定成员财富走势图" name="member">
       <el-form label-width="120px" label-position="left" inline>
         <el-form-item label="id">
-          <el-input-number class="member-id" size="mini" v-model="memberId" :step="1" :min="1" :max="formData.num" />
+          <el-input-number
+            class="member-id"
+            size="mini"
+            v-model="memberId"
+            :step="1"
+            :min="1"
+            :max="formData.num"
+          />
           <el-button type="success" size="mini" @click="drawMemberFortune">绘制</el-button>
         </el-form-item>
         <el-form-item v-if="memberId">
@@ -35,6 +42,11 @@ import HistogramForm from '@/components/histogram'
 // @ is an alias to /src
 import Fortune from '@/utils/fortune'
 import { Histogram, LineChart } from '@/utils/data'
+import {
+  MONTH_TO_DAYS,
+  YEAR_TO_MONTHS,
+  YEAR_TO_DAYS
+} from '@/utils/define' 
 
 export default {
   name: 'home',
@@ -48,16 +60,16 @@ export default {
       formData: {
         num: 100,
         initFortune: 100,
-        times: 100,
-        rounds: 10000,
-        oneFrameTimes: 10
+        ratio: 0,
+        years: 40,
       },
       histogram: {},
       giniLine: {},
       memberLine: {},
       animation: null,
-      currentRound: 0,
-      memberId: ''
+      currentDay: 0,
+      memberId: '',
+      addTimesByDay: 0
     }
   },
   watch: {
@@ -84,7 +96,8 @@ export default {
         avg: +this.formData.initFortune
       })
       this.histogram.update(this.fortune.persons)
-      this.currentRound = 0
+      this.currentDay = 0
+      clearTimeout(this.animation)
       this.run()
     },
     cancel () {
@@ -106,18 +119,33 @@ export default {
       this.histogram.update(this.fortune.sort)
     },
     run () {
-      for (let i = 0; i < this.formData.oneFrameTimes; i++) {
-        this.currentRound++
-        this.fortune.execute({
-          times: this.formData.times
-        })
+      this.runOneDay()
+      .then(this.run)
+      .catch(()=>{
+        this.currentDay = 0
+      })
+    },
+    runOneDay(){
+      if(this.currentDay%YEAR_TO_DAYS===0){
+        const ratio = +this.formData.ratio / 100
+        this.addTimesByDay = (this.fortune.total * ratio) / YEAR_TO_DAYS
+        // console.log(this.addTimesByDay)
+      }
+      for (let i = 0; i < MONTH_TO_DAYS; i++) {
+        this.currentDay++
+        // console.log(this.currentDay,this.fortune.total)
+        this.fortune.execute({times:this.addTimesByDay})
       }
       this.update()
-      if (this.currentRound < this.formData.rounds - 1) {
-        this.animation = setTimeout(this.run, 1e3 / 24)
-      } else {
-        this.currentRound = 0
-      }
+      return new Promise((resolve,reject)=>{
+        this.animation = setTimeout(()=>{
+          if (this.currentDay < this.formData.years * YEAR_TO_DAYS -1) {
+            resolve()
+          } else {
+            reject()
+          }
+        }, 2e3 / YEAR_TO_MONTHS)
+      })
     },
     drawGini () {
       if (this.giniLine.svg) {
@@ -155,8 +183,8 @@ export default {
   .el-form-item {
     margin-bottom: 8px;
   }
-  .member-id{
-    margin-right:8px;
+  .member-id {
+    margin-right: 8px;
   }
 }
 </style>
