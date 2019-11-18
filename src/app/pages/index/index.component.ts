@@ -42,9 +42,9 @@ export class IndexComponent implements OnInit,AfterViewInit {
       width: document.body.offsetWidth-this.scrollWidth,
       padding : {
         top: 58,
-        left: 58,
+        left: 33,
         bottom: 58,
-        right: 58,
+        right: 33,
       }
     }
   }
@@ -57,4 +57,7 @@ export class IndexComponent implements OnInit,AfterViewInit {
     console.log(event)
   }
 
+  stop(){
+    
+  }
 }

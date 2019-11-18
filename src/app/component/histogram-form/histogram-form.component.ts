@@ -10,6 +10,7 @@ export class HistogramFormComponent implements OnInit {
   @Input() middle: number = 100
   @Input() gini: number = 0
   @Output() readonly startRun = new EventEmitter()
+  @Output() readonly endRun = new EventEmitter()
   FormData: FormGroup
 
   constructor(private fb: FormBuilder) {}
@@ -25,5 +26,8 @@ export class HistogramFormComponent implements OnInit {
   start():void{
     // console.log(this.FormData.value)
     this.startRun.emit(this.FormData.value)
+  }
+  stop():void{
+    this.endRun.emit()
   }
 }
