@@ -1,6 +1,8 @@
-import { Component, OnInit,AfterViewInit } from '@angular/core';
+import { Component, OnInit,AfterViewInit,ViewChild,ElementRef } from '@angular/core';
 
 import {Options} from '../../component/d3-histogram/d3-histogram.interface'
+
+import {Fortune} from '../../utils/fortune'
 
 @Component({
   selector: 'app-index',
@@ -8,26 +10,33 @@ import {Options} from '../../component/d3-histogram/d3-histogram.interface'
   styleUrls: ['./index.component.less']
 })
 export class IndexComponent implements OnInit,AfterViewInit {
-  data = [{
-    id: 1,
-    data: 100,
-    color: 'red'
-  },{
-    id: 2,
-    data: 120,
-    color: 'green'
-  },{
-    id:3,
-    data: 50,
-    color: 'blue'
-  }]
+  @ViewChild("histogramForm", { static: false }) histogramForm: ElementRef;
+  data = []
   private tabHeight:number=65
   private scrollWidth:number=17
   private histogramOptions: Options
-  constructor() { }
+  private fortuneData: Fortune
+  currentGini: number = 0
+  currentMiddle: number = 0
+  constructor() {
+
+  }
 
   ngOnInit() {
-    console.log(document.body.offsetHeight - this.tabHeight)
+    this.fortuneData = new Fortune({
+      length:100,
+      fortune: 100
+    })
+    this.currentGini = this.fortuneData.getGini()
+    this.currentMiddle = this.fortuneData.getMiddle()
+    this.data = this.fortuneData.getSortData().map(people=>{
+      const info = people.getInfo()
+      return {
+        id: info.id,
+        data: info.fortune,
+        color: people.color
+      }
+    })
     this.histogramOptions = {
       height:  document.body.offsetHeight - this.tabHeight,
       width: document.body.offsetWidth-this.scrollWidth,
@@ -41,7 +50,11 @@ export class IndexComponent implements OnInit,AfterViewInit {
   }
 
   ngAfterViewInit(){
-    
+    console.log(this.histogramForm)
+  }
+
+  run(event){
+    console.log(event)
   }
 
 }

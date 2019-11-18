@@ -122,5 +122,4 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
       .attr("height", d => height - padding.top - padding.bottom - yScale(d[dataKey]))
       .attr('fill',d=>d[color])
   }
-
 }

@@ -1,0 +1,35 @@
+<form nz-form nzLayout="inline" [formGroup]="FormData">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="peoples">人数</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <nz-input-group nzAddOnAfter="人">
+        <nz-input-number formControlName="peoples" placeholder="请输入人数" [nzMin]="10" [nzMax]="100" [nzStep]="1"></nz-input-number>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="rate">增长率</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <nz-input-group nzAddOnAfter="%">
+        <nz-input-number formControlName="rate" placeholder="请输入增长率" [nzMin]="0" [nzStep]="0.01"></nz-input-number>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="years">时间</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <nz-input-group nzAddOnAfter="年">
+        <nz-input-number formControlName="years" placeholder="输入时间" [nzMin]="1" [nzStep]="1"></nz-input-number>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="20">
+      <button nz-button nzType="primary" type="button" (click)="start()">开始</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<nz-row>
+  <nz-col class="value" [nzSpan]="12">中位数：{{middle}}</nz-col>
+  <nz-col class="value" [nzSpan]="12">基尼系数：{{gini}}</nz-col>
+</nz-row>

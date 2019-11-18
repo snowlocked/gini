@@ -57,6 +57,9 @@ export class Fortune{
       }))
     }
     this.total = this.length * data.fortune
+    this.middle = data.fortune
+    this.gini = 0
+    this.sort = this.peoples
   }
 
   execute(extraTimes: number = 0):void{   

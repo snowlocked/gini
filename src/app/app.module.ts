@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IconsProviderModule } from './icons/icons-provider.module';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
@@ -14,6 +14,7 @@ import zh from '@angular/common/locales/zh';
 import {IndexComponent} from './pages/index/index.component'
 
 import { D3Histogram } from './component/d3-histogram/d3-histogram.component';
+import { HistogramFormComponent } from './component/histogram-form/histogram-form.component';
 
 registerLocaleData(zh);
 
@@ -21,7 +22,8 @@ registerLocaleData(zh);
   declarations: [
     AppComponent,
     IndexComponent,
-    D3Histogram
+    D3Histogram,
+    HistogramFormComponent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +31,7 @@ registerLocaleData(zh);
     IconsProviderModule,
     NgZorroAntdModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule
   ],
