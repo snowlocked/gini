@@ -1,6 +1,6 @@
 import { Component, OnInit,AfterViewInit,ViewChild,ElementRef } from '@angular/core';
 
-import {Options,HasAxis} from '../../component/d3-histogram/d3-histogram.interface'
+import {Options,HasAxis} from '../../interface/d3.interface'
 import {D3Histogram} from '../../component/d3-histogram/d3-histogram.component'
 import {RunParams} from './index.interface'
 

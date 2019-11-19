@@ -15,6 +15,7 @@ import {IndexComponent} from './pages/index/index.component'
 
 import { D3Histogram } from './component/d3-histogram/d3-histogram.component';
 import { HistogramFormComponent } from './component/histogram-form/histogram-form.component';
+import { D3LineChartComponent } from './component/d3-line-chart/d3-line-chart.component';
 
 registerLocaleData(zh);
 
@@ -23,7 +24,8 @@ registerLocaleData(zh);
     AppComponent,
     IndexComponent,
     D3Histogram,
-    HistogramFormComponent
+    HistogramFormComponent,
+    D3LineChartComponent
   ],
   imports: [
     BrowserModule,

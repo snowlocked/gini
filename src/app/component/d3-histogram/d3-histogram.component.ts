@@ -10,7 +10,7 @@ import {
 
 import * as d3 from 'd3'
 
-import { Props, Options, AxisScale, Axis, HasAxis } from './d3-histogram.interface'
+import { Props, Options, AxisScale, Axis, HasAxis } from '../../interface/d3.interface'
 
 @Component({
   selector: 'app-d3-histogram',
