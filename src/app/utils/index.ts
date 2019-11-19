@@ -20,6 +20,7 @@ export const getRandom = (max: number= 100, min: number= 0):number => Math.floor
 
 export const setColor = (index: number, total: number= 100):string => {
   let p = (256 ** 3) * index / total
+  p = p + getRandom(p/512,-p/512)
   const red = Math.floor(p / (256 ** 2))
   if (red >= 256) {
     return 'rgba(255,255,255, 1)'

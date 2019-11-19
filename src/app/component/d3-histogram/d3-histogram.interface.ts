@@ -28,3 +28,8 @@ export interface Axis{
   xAxis: d3.Axis<string>,
   yAxis: d3.Axis<number | {valueOf(): number;}>
 }
+
+export interface HasAxis{
+  x: boolean,
+  y: boolean
+}

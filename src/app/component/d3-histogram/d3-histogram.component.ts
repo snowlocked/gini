@@ -10,7 +10,7 @@ import {
 
 import * as d3 from 'd3'
 
-import { Props, Options, AxisScale, Axis } from './d3-histogram.interface'
+import { Props, Options, AxisScale, Axis, HasAxis } from './d3-histogram.interface'
 
 @Component({
   selector: 'app-d3-histogram',
@@ -21,6 +21,7 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild("d3selector", { static: false }) d3selector: ElementRef;
   @Input() data: Array<Object>
+  @Input() hasAxis: HasAxis = { x: true,y: true}
   @Input() props: Props = {
     dataKey: 'data',
     id: 'id',
@@ -49,7 +50,9 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
     this.draw()
   }
 
-  ngOnChanges() { }
+  ngOnChanges() {
+    this.update()
+  }
 
   // 初始化画布
   draw() {
@@ -80,7 +83,7 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
     //x轴的比例尺
     const xScale = d3.scaleBand()
       .domain(d3.range(0, this.data.length).map(value => {
-        return value.toString();
+        return value.toString()
       }))
       .rangeRound([0, width - padding.left - padding.right]);
 
@@ -111,11 +114,11 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
   drawAxis(axis: Axis): void {
     const { xAxis, yAxis } = axis
     const { padding, height } = this.options
-    this.svg.append('g')
+    this.hasAxis.x && this.svg.append('g')
       .attr('class', 'axis')
       .attr('transform', 'translate(' + padding.left + ',' + (height - padding.bottom) + ')')
       .call(xAxis)
-    this.svg.append('g')
+    this.hasAxis.y && this.svg.append('g')
       .attr('class', 'axis')
       .attr('transform', 'translate(' + padding.left + ',' + padding.top + ')')
       .call(yAxis)
@@ -141,26 +144,11 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
   }
 
   // 更新柱形图
-  update (data) {
-    this.data = data || []
-    let updateRect = this.svg.selectAll('.rect').data(this.data) // 错误 d3.selectAll() 出了svg范围
-    let exitRect = updateRect.exit()
-    let enterRect = updateRect.enter()
-
-    // update处理方法
-    this.setRectAttrs(
-      updateRect
-        .property('data', d => d)
-        .transition()
-    )
-
-    // enter处理方法
-    enterRect = enterRect.append('rect')
-      .property('data', d => d)
-    enterRect = this.setRectAttrs(enterRect)
-    this.addToolTipEvent(enterRect)
-
-    exitRect.transition().remove()
+  update () {
+    if(this.svg && this.tooltip){
+      this.remove()
+      this.draw()
+    }
   }
 
   // 设置柱形属性
@@ -193,7 +181,6 @@ export class D3Histogram implements OnInit, AfterViewInit, OnChanges {
 
   // 更新提示框信息
   updateTooltip(data:Object,x,y){
-    console.log(x,y)
     const {width,padding} = this.options
     if (x < padding.left) {
       x = padding.left
