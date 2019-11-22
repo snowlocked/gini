@@ -24,12 +24,26 @@ export interface AxisScale{
   yScale: d3.ScaleLinear<number, number>
 }
 
+export interface AxisScaleLine{
+  xScale: d3.ScaleLinear<number, number>,
+  yScale: d3.ScaleLinear<number, number>,
+  xScaleYear: d3.ScaleLinear<number, number>
+}
+
 export interface Axis{
-  xAxis: d3.Axis<string>,
-  yAxis: d3.Axis<number | {valueOf(): number;}>
+  xAxis: d3.Axis<string|d3.AxisDomain> ,
+  yAxis: d3.Axis<number | {valueOf(): number;} | d3.AxisDomain>
 }
 
 export interface HasAxis{
   x: boolean,
   y: boolean
 }
+
+export interface PointProps {
+  r: number,
+  color: string,
+  xScale: d3.ScaleLinear<number, number>,
+  yScale: d3.ScaleLinear<number, number>
+}
+

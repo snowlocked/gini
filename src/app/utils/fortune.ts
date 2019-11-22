@@ -134,4 +134,12 @@ export class Fortune{
     return this.giniHistory
   }
 
+  getTargetPeopleHistory(id: number): number[] {
+    const people =  this.peoples.find(people=>people.getInfo().id === id)
+    if(people){
+      return people.getHistory()
+    }
+    return []
+  }
+
 }

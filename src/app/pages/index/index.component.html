@@ -1,13 +1,22 @@
-<nz-tabset>
+<nz-tabset [(nzSelectedIndex)]="currentTab" (nzSelectChange)="changeTab(currentTab)">
   <nz-tab nzTitle="财富分布直方图">
     <app-histogram-form #histogramForm [middle]="currentMiddle" [gini]="currentGini" (startRun)="run($event)" (endRun)="stop()"></app-histogram-form>
-    <app-d3-histogram #d3histogram [data]="data" [options]="histogramOptions" [hasAxis]="hasAxis"></app-d3-histogram>
+    <app-d3-histogram [data]="data" [options]="graphOptions" [hasAxis]="hasAxis"></app-d3-histogram>
   </nz-tab>
   <nz-tab nzTitle="基尼系数走势图">
-    Content of Tab Pane 2
+    <app-d3-line-chart [options]="graphOptions" [data]="giniHistory"></app-d3-line-chart>
   </nz-tab>
   <nz-tab nzTitle="特定成员财富走势图">
-    Content of Tab Pane 3
+    <div nz-row>
+      <nz-form-item nz-col nzSpan="18">
+        <nz-form-label [nzSpan]="6" nzFor="id">成员id</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+          <nz-input-number nz-input [(ngModel)]="memberId" [nzMin]="1" [nzMax]="membersNum" [nzStep]="1"></nz-input-number>
+          <button nz-button nzType="primary" type="button" (click)="drawMemberFortune(memberId)">查看</button>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <app-d3-line-chart [options]="graphOptions" [data]="memberHistory"></app-d3-line-chart>
   </nz-tab>
 </nz-tabset>
 

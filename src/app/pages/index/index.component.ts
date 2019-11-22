@@ -1,7 +1,6 @@
 import { Component, OnInit,AfterViewInit,ViewChild,ElementRef } from '@angular/core';
 
 import {Options,HasAxis} from '../../interface/d3.interface'
-import {D3Histogram} from '../../component/d3-histogram/d3-histogram.component'
 import {RunParams} from './index.interface'
 
 import {Fortune} from '../../utils/fortune'
@@ -18,32 +17,36 @@ import {
 })
 export class IndexComponent implements OnInit,AfterViewInit {
   @ViewChild("histogramForm", { static: false }) histogramForm: ElementRef;
-  @ViewChild("d3histogram", { static: true }) d3histogram: D3Histogram;
   data = []
+  giniHistory: number[] = []
+  memberHistory: number[] = []
   private tabHeight:number=65
   private scrollWidth:number=17
-  private histogramOptions: Options
+  private graphOptions: Options
   private fortuneData: Fortune
   private currentRound: number = 0
   private extraTimes: number
   private timer : any = null
   private runData:RunParams
   private hasAxis:HasAxis = { x: false,y: true}
+  currentTab: number = 0
   currentGini: number = 0
   currentMiddle: number = 0
+  memberId: number
+  membersNum: number = 100
   constructor() {
 
   }
 
   ngOnInit() {
     this.fortuneData = new Fortune({
-      length:100,
+      length:this.membersNum,
       fortune: 100
     })
     this.currentGini = this.fortuneData.getGini()
     this.currentMiddle = this.fortuneData.getMiddle()
     this.updateData()
-    this.histogramOptions = {
+    this.graphOptions = {
       height:  document.body.offsetHeight - this.tabHeight,
       width: document.body.offsetWidth-this.scrollWidth,
       padding : {
@@ -55,14 +58,19 @@ export class IndexComponent implements OnInit,AfterViewInit {
     }
   }
 
-  ngAfterViewInit(){
-    console.log(this.d3histogram)
+  ngAfterViewInit(){}
+
+  changeTab(tab){
+    if(tab===1){
+      this.giniHistory = this.fortuneData.getGiniHistory()
+    }
   }
 
   run(event:RunParams){
     this.runData = event
+    this.membersNum = event.peoples
     this.fortuneData = new Fortune({
-      length: event.peoples,
+      length: this.membersNum,
       fortune: 100
     })
     
@@ -81,7 +89,6 @@ export class IndexComponent implements OnInit,AfterViewInit {
       this.runOneDay()
     }
     this.updateData()
-    // this.d3histogram.update()
   }
   async runMonths(months:number){
     this.runOneMonth()
@@ -108,5 +115,9 @@ export class IndexComponent implements OnInit,AfterViewInit {
         color: people.color
       }
     })
+  }
+
+  drawMemberFortune(memberId){
+    this.memberHistory = this.fortuneData.getTargetPeopleHistory(memberId)
   }
 }
