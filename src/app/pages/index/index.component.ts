@@ -20,11 +20,11 @@ export class IndexComponent implements OnInit,AfterViewInit {
   data = []
   giniHistory: number[] = []
   memberHistory: number[] = []
+  disabledStart:boolean = false
   private tabHeight:number=65
   private scrollWidth:number=17
   private graphOptions: Options
   private fortuneData: Fortune
-  private currentRound: number = 0
   private extraTimes: number
   private timer : any = null
   private runData:RunParams
@@ -67,6 +67,7 @@ export class IndexComponent implements OnInit,AfterViewInit {
   }
 
   run(event:RunParams){
+    this.disabledStart = true
     this.runData = event
     this.membersNum = event.peoples
     this.fortuneData = new Fortune({
@@ -97,13 +98,20 @@ export class IndexComponent implements OnInit,AfterViewInit {
       // console.log(this.extraTimes)
     }
     months--
-    months > 0 && setTimeout(()=>{
-      this.runMonths(months)
-    }, 2e3/YEAR_TO_MONTHS)
+    if(months > 0){
+      this.timer = setTimeout(()=>{
+        this.runMonths(months)
+      }, 2e3/YEAR_TO_MONTHS)
+    }else{
+      this.disabledStart = false
+    }
   }
 
-  stop(){
-
+  stop() {
+    this.disabledStart = false
+    if(this.timer){
+      clearTimeout(this.timer)
+    }
   }
 
   updateData(){

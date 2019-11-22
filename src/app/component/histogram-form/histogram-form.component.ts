@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup,FormControl } from '@angular/forms';
 export class HistogramFormComponent implements OnInit {
   @Input() middle: number = 100
   @Input() gini: number = 0
+  @Input() disabledStart: boolean = false
   @Output() readonly startRun = new EventEmitter()
   @Output() readonly endRun = new EventEmitter()
   FormData: FormGroup
