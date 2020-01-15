@@ -1,0 +1,7 @@
+image: cypress/browsers:node10.16.0-chrome77
+lhci:
+  script:
+    - npm install
+    - npm run build
+    - npm install -g @lhci/cli@0.3.x
+    - lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" --collect.staticDistDir=./dist/gini-ng || echo "LHCI failed!"
