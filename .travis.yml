@@ -1,0 +1,16 @@
+branches:
+  only:
+    - master
+language: node_js
+node_js:
+- lts/*
+before_install:
+- yarn global add @lhci/cli
+install:
+- yarn
+- yarn build
+script:
+- lhci autorun --upload.target=temporary-public-storage --collect.staticDistDir=./dist/gini-ng
+addons:
+  chrome: stable
+cache: yarn
